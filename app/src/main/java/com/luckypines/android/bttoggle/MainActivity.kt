@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     bluetoothAdapter = AndroidBluetoothAdapter(this)
     val btRepo = BluetoothDevicesRepository(bluetoothAdapter)
-    sharedPreferencesAdapter = SharedPreferencesAdapter(getPreferences(MODE_PRIVATE))
+    sharedPreferencesAdapter = SharedPreferencesAdapter(getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE))
     val selectedAddress = sharedPreferencesAdapter.getLastSelectedAddress()
     viewModel = ViewModelProvider(this, MainViewModelFactory(btRepo, selectedAddress))
       .get(MainViewModel::class.java)
@@ -86,6 +86,11 @@ class MainActivity : AppCompatActivity() {
     itemSelectJob?.cancel()
     selectedIndexJob?.cancel()
     previousIndexJob?.cancel()
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    bluetoothAdapter.release()
   }
 
   class ItemTouchListener(val gestureDetector: GestureDetector) : RecyclerView.SimpleOnItemTouchListener() {

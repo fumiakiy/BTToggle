@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothHeadset
 import android.bluetooth.BluetoothProfile
 import android.content.Context
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 
 class AndroidBluetoothAdapter(context: Context) {
 
@@ -43,6 +45,15 @@ class AndroidBluetoothAdapter(context: Context) {
     bluetoothAdapter.getProfileProxy(context, a2dpProfileListener, BluetoothProfile.A2DP)
   }
 
+  suspend fun onReady() {
+    coroutineScope {
+      while (true) {
+        delay(1000L)
+        if (headsetProxy != null && a2dpProxy != null) break
+      }
+    }
+  }
+
   fun getBondedDevices(): Set<BluetoothDevice> {
     return bluetoothAdapter.bondedDevices
   }
@@ -58,11 +69,13 @@ class AndroidBluetoothAdapter(context: Context) {
     return false
   }
 
-  fun toggle(macAddress: String) {
+  fun toggle(macAddress: String): Boolean {
     if (isConnected(macAddress)) {
       disconnect(macAddress)
+      return false
     } else {
       connect(macAddress)
+      return true
     }
   }
 
@@ -97,5 +110,10 @@ class AndroidBluetoothAdapter(context: Context) {
         disconnect1?.invoke(headsetProxy, device)
       }
     }
+  }
+
+  fun release() {
+    if (headsetProxy != null) bluetoothAdapter.closeProfileProxy(BluetoothProfile.HEADSET, headsetProxy)
+    if (a2dpProxy != null) bluetoothAdapter.closeProfileProxy(BluetoothProfile.A2DP, a2dpProxy)
   }
 }
