@@ -66,7 +66,6 @@ class AndroidBluetoothAdapter(context: Context) {
     }
   }
 
-
   fun connect(macAddress: String) {
     if (headsetProxy == null) return
     val device = bluetoothAdapter.getRemoteDevice(macAddress)
