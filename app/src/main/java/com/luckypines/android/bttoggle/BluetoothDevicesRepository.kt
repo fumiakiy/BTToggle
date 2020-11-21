@@ -2,7 +2,6 @@ package com.luckypines.android.bttoggle
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 
 class BluetoothDevicesRepository(bluetoothAdapter: AndroidBluetoothAdapter) {
   private val devices = bluetoothAdapter.getBondedDevices().map {

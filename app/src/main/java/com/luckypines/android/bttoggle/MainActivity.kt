@@ -19,9 +19,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-  private val selectedAddress = "04:5D:4B:66:BF:E1"
-
   private lateinit var bluetoothAdapter: AndroidBluetoothAdapter
+  private lateinit var sharedPreferencesAdapter: SharedPreferencesAdapter
   private lateinit var listAdapter: DeviceViewAdapter
   private lateinit var itemTouchListener: ItemTouchListener
   private          var itemSelectJob: Job? = null
@@ -36,6 +35,8 @@ class MainActivity : AppCompatActivity() {
 
     bluetoothAdapter = AndroidBluetoothAdapter(this)
     val btRepo = BluetoothDevicesRepository(bluetoothAdapter)
+    sharedPreferencesAdapter = SharedPreferencesAdapter(getPreferences(MODE_PRIVATE))
+    val selectedAddress = sharedPreferencesAdapter.getLastSelectedAddress()
     viewModel = ViewModelProvider(this, MainViewModelFactory(btRepo, selectedAddress))
       .get(MainViewModel::class.java)
 
@@ -69,6 +70,7 @@ class MainActivity : AppCompatActivity() {
       viewModel.selectedIndex.collect { index ->
         if (index < 0) return@collect
         listAdapter.notifyItemChanged(index)
+        sharedPreferencesAdapter.setLastSelectedAddress(viewModel.getDevice(index).address)
       }
     }
     previousIndexJob = CoroutineScope(Dispatchers.Main).launch {

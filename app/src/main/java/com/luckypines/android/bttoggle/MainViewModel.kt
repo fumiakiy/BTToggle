@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
   private val btRepo: BluetoothDevicesRepository,
-  private val defaultAddress: String
+  private val defaultAddress: String?
 ): ViewModel() {
   private val devices = mutableListOf<BluetoothDevice>()
 
@@ -22,6 +22,7 @@ class MainViewModel(
     viewModelScope.launch {
       val _devices = btRepo.getDevices()
       devices.addAll(_devices)
+      if (defaultAddress == null) return@launch
       _devices.forEachIndexed { index, device ->
         if (device.address.equals(defaultAddress)) {
           select(index)
@@ -45,7 +46,7 @@ class MainViewModel(
 
 class MainViewModelFactory(
   private val btRepo: BluetoothDevicesRepository,
-  private val defaultAddress: String
+  private val defaultAddress: String?
 ): ViewModelProvider.Factory {
   override fun <T : ViewModel?> create(modelClass: Class<T>): T {
     @Suppress("UNCHECKED_CAST")
