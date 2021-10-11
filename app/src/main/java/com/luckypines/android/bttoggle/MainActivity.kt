@@ -1,6 +1,7 @@
 package com.luckypines.android.bttoggle
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.widget.Button
@@ -12,13 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
+  private lateinit var fcmTokenManager: FCMTokenManager
   private lateinit var bluetoothAdapter: AndroidBluetoothAdapter
   private lateinit var sharedPreferencesAdapter: SharedPreferencesAdapter
   private lateinit var listAdapter: DeviceViewAdapter
@@ -32,6 +36,8 @@ class MainActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_main)
+
+    fcmTokenManager = FCMTokenManager()
 
     bluetoothAdapter = AndroidBluetoothAdapter(this)
     val btRepo = BluetoothDevicesRepository(bluetoothAdapter)
@@ -78,6 +84,11 @@ class MainActivity : AppCompatActivity() {
         if (index < 0) return@collect
         listAdapter.notifyItemChanged(index)
       }
+    }
+
+    CoroutineScope(Dispatchers.Main).launch {
+      val token = fcmTokenManager.getToken()
+      Log.d(">>>>>", token ?: "null")
     }
   }
 

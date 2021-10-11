@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "766986806742",
+    "firebase_url": "https://colors-1-269a2.firebaseio.com",
+    "project_id": "colors-1-269a2",
+    "storage_bucket": "colors-1-269a2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:766986806742:android:77e05341df88f798553077",
+        "android_client_info": {
+          "package_name": "com.luckypines.android.bttoggle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "766986806742-f5nomt57deneelag7vrju2ihpg7rsq5k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEa9rkE8yNCmJND4J5MyW4Iwjwws_Ygcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "766986806742-f5nomt57deneelag7vrju2ihpg7rsq5k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
