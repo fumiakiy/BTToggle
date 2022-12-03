@@ -48,7 +48,7 @@ class MainViewModelFactory(
   private val btRepo: BluetoothDevicesRepository,
   private val defaultAddress: String?
 ): ViewModelProvider.Factory {
-  override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+  override fun <T : ViewModel> create(modelClass: Class<T>): T {
     @Suppress("UNCHECKED_CAST")
     return MainViewModel(btRepo, defaultAddress) as T
   }
